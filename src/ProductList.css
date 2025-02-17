@@ -39,40 +39,31 @@ body {
    
 }
 
-/* Product Grid */
-.product-grid {
-    display:flex;
-    flex-direction: column;
-    width: 100vw;
-    align-items: center;
-    justify-content: center;
-}
-.product-list {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 50px;
-    /* background-color: pink; */
-    /* justify-content: space-between; */
+/* Product Grid (Modified) */.product-grid {
+    display: grid; /* Use grid layout */
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* Responsive columns */
+    gap: 20px;
     padding: 20px;
-    width: 100%;
-    align-items: center;
-    justify-content: center;
+}.category-container { /* Style for each category */
+    border-bottom: 1px solid #ccc;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+}.plant-list { /* Grid for plants within a category */
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 10px;
 }
 
-/* Product Card */
-.product-card {
-    flex: 0 0 calc(33.33% - 20px); /* Adjust width for 3 cards per row with 20px gap */
-    max-width: calc(26.33% - 20px); /* Adjust max-width for 3 cards per row with 20px gap */
-    margin-bottom: 20px;
-    padding: 20px;
-    background-color: #fff;
-    border: 1px solid #ccc;
-    border-radius: 5px;
+/* Product Card (Modified) */.product-item { /* Style the individual plant items */
+    border: 1px solid #ddd;
+    padding: 10px;
     text-align: center;
-    position: relative;
-    
-    gap: 20px;
+}.plant-image {
+    max-width: 100%;
+    height: auto;
+    margin-bottom: 10px;
 }
+
 
 /* Pseudo-classes - Hover effect on product button */
 .product-card:hover {
