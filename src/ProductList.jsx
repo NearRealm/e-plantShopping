@@ -366,9 +366,9 @@ function ProductList() {
                   borderTop: "1px solid black",
                   borderBottom: "1px solid black",
                   width: "fit-content",
-                  padding: "0 20px",
+                  padding: "0 5px",
                   margin: "20px auto",
-                  fontSize: "28px",
+                  fontSize: "14px",
                 }}
               >
                 {category.category}
