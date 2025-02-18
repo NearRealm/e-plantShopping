@@ -1,29 +1,27 @@
-import React from "react";
 import { useSelector, useDispatch } from "react-redux";
+import PropTypes from "prop-types";
 import { removeItem, updateQuantity } from "./CartSlice";
 import "./CartItem.css";
-import PropTypes from "prop-types";
 
 const CartItem = ({ onContinueShopping }) => {
-  const cartItems = useSelector((state) => state.cart.items);
+  const cart = useSelector((state) => state.cart.items);
   const dispatch = useDispatch();
 
+  // Calculate total amount for all products in the cart
   const calculateTotalAmount = () => {
     let total = 0;
-    cartItems.forEach((item) => {
-      const quantity = item.quantity;
-      const cost = parseFloat(item.cost.substring(1));
-      total += quantity * cost;
+
+    cart?.forEach((item) => {
+      const { quantity, cost } = item;
+      const parsedCost = parseFloat(cost.substring(1));
+      total += quantity * parsedCost;
     });
+
     return total;
   };
 
   const handleContinueShopping = (e) => {
     onContinueShopping(e);
-  };
-
-  const handleCheckoutShopping = (e) => {
-    alert("Functionality to be added for future reference");
   };
 
   const handleIncrement = (item) => {
@@ -35,34 +33,38 @@ const CartItem = ({ onContinueShopping }) => {
       dispatch(
         updateQuantity({ name: item.name, quantity: item.quantity - 1 })
       );
-    } else {
-      dispatch(removeItem(item.name));
+    } else if (item.quantity === 1) {
+      handleRemove(item);
     }
   };
 
-  const handleRemove = (itemName) => {
-    dispatch(removeItem(itemName));
+  const handleRemove = (item) => {
+    dispatch(removeItem(item.name));
   };
 
+  // Calculate total cost based on quantity for an item
   const calculateTotalCost = (item) => {
-    const cost = parseFloat(item.cost.substring(1));
-    return item.quantity * cost;
+    const parsedCost = parseFloat(item.cost.substring(1));
+    return parsedCost * item.quantity;
+  };
+
+  const handleCheckoutShopping = (e) => {
+    e.preventDefault();
+    alert("Functionality to be added for future reference");
   };
 
   return (
     <div className="cart-container">
+      <h2 style={{ color: "black" }}>
+        Total Cart Amount: ${calculateTotalAmount()}
+      </h2>
       <div>
-        <h2>Shopping Cart</h2>
-        {cartItems.map((item) => (
+        {cart.map((item) => (
           <div className="cart-item" key={item.name}>
-            <img
-              className="cart-item-image"
-              src={item.image}
-              alt={item.name}
-            />
+            <img className="cart-item-image" src={item.image} alt={item.name} />
             <div className="cart-item-details">
               <div className="cart-item-name">{item.name}</div>
-              <div className="cart-item-cost">Cost: {item.cost}</div>
+              <div className="cart-item-cost">{item.cost}</div>
               <div className="cart-item-quantity">
                 <button
                   className="cart-item-button cart-item-button-dec"
@@ -81,11 +83,11 @@ const CartItem = ({ onContinueShopping }) => {
                 </button>
               </div>
               <div className="cart-item-total">
-                Total: ${calculateTotalCost(item).toFixed(2)}
+                Total: ${calculateTotalCost(item)}
               </div>
               <button
                 className="cart-item-delete"
-                onClick={() => handleRemove(item.name)}
+                onClick={() => handleRemove(item)}
               >
                 Delete
               </button>
@@ -96,9 +98,7 @@ const CartItem = ({ onContinueShopping }) => {
       <div
         style={{ marginTop: "20px", color: "black" }}
         className="total_cart_amount"
-      >
-        Total Amount: ${calculateTotalAmount().toFixed(2)}
-      </div>
+      ></div>
       <div className="continue_shopping_btn">
         <button
           className="get-started-button"
@@ -117,8 +117,9 @@ const CartItem = ({ onContinueShopping }) => {
     </div>
   );
 };
-CartItem.propTypes = {
-  onContinueShopping: PropTypes.func.isRequired,
-};
 
 export default CartItem;
+
+CartItem.propTypes = {
+  onContinueShopping: PropTypes.func,
+};
