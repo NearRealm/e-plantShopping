@@ -2,6 +2,7 @@ import React from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { removeItem, updateQuantity } from "./CartSlice";
 import "./CartItem.css";
+import PropTypes from "prop-types";
 
 const CartItem = ({ onContinueShopping }) => {
   const cartItems = useSelector((state) => state.cart.items);
@@ -115,6 +116,9 @@ const CartItem = ({ onContinueShopping }) => {
       </div>
     </div>
   );
+};
+CartItem.propTypes = {
+  onContinueShopping: PropTypes.func.isRequired,
 };
 
 export default CartItem;
