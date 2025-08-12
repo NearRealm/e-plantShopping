@@ -1,32 +1,10 @@
-import React, { useState, useEffect } from "react";
+import { useState } from "react";
 import "./ProductList.css";
 import CartItem from "./CartItem";
 import { useDispatch, useSelector } from "react-redux";
 import { addItem } from "./CartSlice";
 
-function ProductList() {
-  const dispatch = useDispatch();
-  const [showCart, setShowCart] = useState(false);
-  const [addedToCart, setAddedToCart] = useState({});
-  const cartItems = useSelector((state) => state.cart.items);
-
-  const handleAddToCart = (plant) => {
-    dispatch(addItem(plant));
-    setAddedToCart((prevState) => ({
-      ...prevState,
-      [plant.name]: true,
-    }));
-  };
-
-  const handleCartClick = () => {
-    setShowCart(true);
-  };
-
-  const handleContinueShopping = () => {
-    setShowCart(false);
-  };
-
-  const plantsArray = [
+const PLANTS = [
     {
       category: "Air Purifying Plants",
       plants: [
@@ -107,6 +85,28 @@ function ProductList() {
     },
   ];
 
+function ProductList() {
+  const dispatch = useDispatch();
+  const [showCart, setShowCart] = useState(false);
+  const [addedToCart, setAddedToCart] = useState({});
+  const cartItems = useSelector((state) => state.cart.items);
+
+  const handleAddToCart = (plant) => {
+    dispatch(addItem(plant));
+    setAddedToCart((prevState) => ({
+      ...prevState,
+      [plant.name]: true,
+    }));
+  };
+
+  const handleCartClick = () => {
+    setShowCart(true);
+  };
+
+  const handleContinueShopping = () => {
+    setShowCart(false);
+  };
+
   return (
     <div>
       <div className="navbar">
@@ -133,14 +133,14 @@ function ProductList() {
       </div>
       {!showCart ? (
         <div className="product-grid">
-          {plantsArray.map((category, index) => (
-            <div key={index}>
+          {PLANTS.map((category) => (
+            <div key={category.category}>
               <h1>
                 <div>{category.category}</div>
               </h1>
               <div className="product-list">
-                {category.plants.map((plant, plantIndex) => (
-                  <div className="product-card" key={plantIndex}>
+                {category.plants.map((plant) => (
+                  <div className="product-card" key={plant.name}>
                     <img
                       className="product-image"
                       src={plant.image}
