@@ -1,4 +1,5 @@
-import React from "react";
+import { useMemo } from "react";
+import PropTypes from "prop-types";
 import { useSelector, useDispatch } from "react-redux";
 import { removeItem, updateQuantity } from "./CartSlice";
 import "./CartItem.css";
@@ -7,21 +8,18 @@ const CartItem = ({ onContinueShopping }) => {
   const cartItems = useSelector((state) => state.cart.items);
   const dispatch = useDispatch();
 
-  const calculateTotalAmount = () => {
-    let total = 0;
-    cartItems.forEach((item) => {
-      const quantity = item.quantity;
+  const totalAmount = useMemo(() => {
+    return cartItems.reduce((sum, item) => {
       const cost = parseFloat(item.cost.substring(1));
-      total += quantity * cost;
-    });
-    return total;
+      return sum + item.quantity * cost;
+    }, 0);
+  }, [cartItems]);
+
+  const handleContinueShopping = () => {
+    onContinueShopping();
   };
 
-  const handleContinueShopping = (e) => {
-    onContinueShopping(e);
-  };
-
-  const handleCheckoutShopping = (e) => {
+  const handleCheckoutShopping = () => {
     alert("Functionality to be added for future reference");
   };
 
@@ -96,12 +94,12 @@ const CartItem = ({ onContinueShopping }) => {
         style={{ marginTop: "20px", color: "black" }}
         className="total_cart_amount"
       >
-        Total Amount: ${calculateTotalAmount().toFixed(2)}
+        Total Amount: ${totalAmount.toFixed(2)}
       </div>
       <div className="continue_shopping_btn">
         <button
           className="get-started-button"
-          onClick={(e) => handleContinueShopping(e)}
+          onClick={handleContinueShopping}
         >
           Continue Shopping
         </button>
@@ -115,6 +113,10 @@ const CartItem = ({ onContinueShopping }) => {
       </div>
     </div>
   );
+};
+
+CartItem.propTypes = {
+  onContinueShopping: PropTypes.func.isRequired,
 };
 
 export default CartItem;
